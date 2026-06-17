@@ -17,9 +17,9 @@ When conducting Windows binary patch diffing a good approach to speed up the ini
 Microsoft often wraps a vulnerability fix in a conditional statement driven by a feature flag which allows them to
 revert the fix in case of unexpected behavior.
 In other words, by paying attention to the functions calling these feature flag functions it is possible to isolate the security-relevant changes from other routine codebase updates.
-It's time to download the relevant NTOSKRNL files from [Winbindex] (https://winbindex.m417z.com) and start diffing them!
+It's time to download the relevant NTOSKRNL files from [Winbindex](https://winbindex.m417z.com) and start diffing them!
 
-<div align='center'><img src="/images/ntosmayfeatureflags.png" height="400" width="700" > </div> <br>
+<div align='center'><img src="/images/ntosmayfeatureflags.png" height="500" width="700" > </div> <br>
 
 As we can see from the picture above three distinct feature flag functions have been added:
 
@@ -103,7 +103,7 @@ void main()
 Below we can see how the POC code triggers a BSOD!
 
 
-<div align='center'><img src="/images/ntpsscrash.png" height="400" width="700" > </div> <br>
+<div align='center'><img src="/images/ntpsscrash.png" height="600" width="700" > </div> <br>
 
 
 After calling **IoAllocateMdl** passing the low DWORD of the provided **NtPssCaptureVaSpaceBulk**'s' *Length* as a parameter, the function will call the **MmMapLockedPagesSpecifyCache** function to obtain a kernel mode address pointing to the same physical memory pages of the *BULK_MEMORY_INFORMATION* usermode buffer.
