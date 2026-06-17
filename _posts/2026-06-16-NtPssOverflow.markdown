@@ -19,7 +19,7 @@ revert the fix in case of unexpected behavior.
 In other words, by paying attention to the functions calling these feature flag functions it is possible to isolate the security-relevant changes from other routine codebase updates.
 It's time to download the relevant NTOSKRNL files from [Winbindex] (https://winbindex.m417z.com) and start diffing them!
 
-<div align='center'><img src="/images/ntosmayfeatureflags.png" height="250" width="700" > </div> <br>
+<div align='center'><img src="/images/ntosmayfeatureflags.png" height="400" width="700" > </div> <br>
 
 As we can see from the picture above three distinct feature flag functions have been added:
 
@@ -32,7 +32,7 @@ After quickly reviewing all of them, we decided to focus our attention on the la
 More specifically, the **Feature_1462962491** feature flag function is called  by **NtPssCaptureVaSpaceBulk**, a syscall introduced in Windows 10 version 2004+.
 Below, we can see the patched code in the NtPssCaptureVaSpaceBulk.
 
-<div align='center'><img src="/images/NtPssCapture_Patched.png" height="250" width="700" > </div> <br>
+<div align='center'><img src="/images/NtPssCapture_Patched.png" height="400" width="700" > </div> <br>
 
 The patch is pretty neat: the patched function will call the **IoAllocateMdl** function only if the value contained in the R12 register is less or equal to 0xFFFFFFFF, a clear hint of a heap overflow vulnerability since the value contained in the R12 low DWORD register is passed as the second parameter to the IoAllocateMdl function!
 This function is used by Windows kernel-mode drivers to allocate and initialize Memory Descriptor Lists which are then used to map the physical pages of a user-mode buffer in kernel-mode memory. In other words, MDLs are used by kernel drivers to access the exact same physical RAM pages a user mode buffer is stored in without the CPU needing to constantly copy data back and forth.
@@ -103,7 +103,7 @@ void main()
 Below we can see how the POC code triggers a BSOD!
 
 
-<div align='center'><img src="/images/ntpsscrash.png" height="250" width="700" > </div> <br>
+<div align='center'><img src="/images/ntpsscrash.png" height="400" width="700" > </div> <br>
 
 
 After calling **IoAllocateMdl** passing the low DWORD of the provided **NtPssCaptureVaSpaceBulk**'s' *Length* as a parameter, the function will call the **MmMapLockedPagesSpecifyCache** function to obtain a kernel mode address pointing to the same physical memory pages of the *BULK_MEMORY_INFORMATION* usermode buffer.
