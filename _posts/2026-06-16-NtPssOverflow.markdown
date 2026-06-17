@@ -103,7 +103,7 @@ void main()
 Below we can see how the POC code triggers a BSOD!
 
 
-<div align='center'><img src="/images/ntpsscrash.png" height="600" width="700" > </div> <br>
+<div align='center'><img src="/images/ntpsscrash.png" height="300" width="800" > </div> <br>
 
 
 After calling **IoAllocateMdl** passing the low DWORD of the provided **NtPssCaptureVaSpaceBulk**'s' *Length* as a parameter, the function will call the **MmMapLockedPagesSpecifyCache** function to obtain a kernel mode address pointing to the same physical memory pages of the *BULK_MEMORY_INFORMATION* usermode buffer.
