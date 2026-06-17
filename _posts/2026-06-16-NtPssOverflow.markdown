@@ -39,6 +39,7 @@ This function is used by Windows kernel-mode drivers to allocate and initialize 
 
 Let's have a look to the *IoAllocateMdl* function prototype:
 {% highlight c %}
+
 PMDL IoAllocateMdl(PVOID VirtualMemory,
 	ULONG Length,
 	BOOLEAN SecondaryBuffer,
@@ -59,6 +60,7 @@ Long story short, the **NtPssCaptureVaSpaceBulk** function is an undocumented sy
 Let's have a look to the *NtPssCaptureVaSpaceBulk* function prototype.
 
 {% highlight c %}
+
 NTSTATUS NtPssCaptureVaSpaceBulk(HANDLE ProcessHandle,
 	PVOID BaseAddress,
 	PBULK_MEMORY_INFORMATION MemoryInfo,
@@ -76,6 +78,7 @@ All these hints led us to believe that the bug root cause stems from a truncatio
 Now we will write a simple POC to verify our assumptions.
 
 {% highlight c %}
+
 #include <Windows.h>
 
 void main()
